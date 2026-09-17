@@ -37,7 +37,7 @@ export default function MobileNav({ links, ctaText, ctaLink }: MobileNavProps) {
       </button>
 
       {/* Mobile Menu Overlay */}
-      <div className={`fixed inset-0 top-[66px] z-40 transition-all duration-500 ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+      <div className={`fixed top-[64px] right-0 w-full h-[100vh] z-40 transition-all duration-500 ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
         {/* Backdrop */}
         <div
           className="absolute inset-0 bg-black/40 backdrop-blur-md"
