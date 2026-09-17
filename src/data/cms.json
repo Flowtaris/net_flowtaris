@@ -47,7 +47,7 @@
     "ctaPrimaryText": "Explore Telemetry",
     "ctaPrimaryLink": "#telemetry",
     "ctaSecondaryText": "View Architecture",
-    "ctaSecondaryLink": "/integration-observatory"
+    "ctaSecondaryLink": "/architecture"
   },
   "footer": {
     "platformLinks": [
