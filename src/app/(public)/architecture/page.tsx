@@ -3,103 +3,82 @@ import Link from 'next/link';
 
 export default function ArchitecturePage() {
   return (
-    <div className="min-h-screen bg-[var(--color-brand-navy)] text-white pt-24 pb-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-      {/* Background Glow */}
-      <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[1000px] h-[800px] bg-[var(--color-brand-accent)]/10 blur-[120px] rounded-full pointer-events-none" />
-      
-      <div className="max-w-5xl mx-auto relative z-10 flex flex-col">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-6xl font-heading font-black tracking-tight mb-6">
-            The Flowtaris Architecture
+    <div className="min-h-screen bg-[var(--color-brand-navy)] text-[var(--color-brand-slate)] pt-24 pb-24 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto flex flex-col">
+        
+        {/* Header (RFC Style) */}
+        <div className="mb-12 border-b border-white/10 pb-8">
+          <h1 className="text-3xl md:text-5xl font-mono font-bold tracking-tight text-white mb-6">
+            Architecture & Infrastructure
           </h1>
-          <p className="text-gray-300 font-mono text-sm md:text-base max-w-3xl mx-auto leading-relaxed">
-            We don't do point-to-point spaghetti integrations. When you are moving mission-critical financial ledgers between SAP and Salesforce, data loss is a terminable offense. This is the exact blueprint we use to guarantee 99.99% uptime and zero dropped payloads.
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs font-mono opacity-70">
+            <div>
+              <span className="block text-gray-500 mb-1">Status</span>
+              <span className="text-emerald-400">Production</span>
+            </div>
+            <div>
+              <span className="block text-gray-500 mb-1">Target SLA</span>
+              <span className="text-white">99.99%</span>
+            </div>
+            <div>
+              <span className="block text-gray-500 mb-1">Topology</span>
+              <span className="text-white">Event-Driven / Pub-Sub</span>
+            </div>
+            <div>
+              <span className="block text-gray-500 mb-1">Last Updated</span>
+              <span className="text-white">2024.Q3</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="prose prose-invert prose-slate max-w-none font-mono text-sm leading-relaxed mb-16 space-y-8">
+          
+          <p>
+            Flowtaris operates on a decoupled, event-driven topology. The objective is to eliminate synchronous, point-to-point connections between core enterprise systems (e.g., SAP, NetSuite, Salesforce) to prevent cascading failures during localized outages.
+          </p>
+
+          {/* Diagram */}
+          <div className="w-full bg-[#0a0f18] border border-white/10 rounded-xl p-2 my-12">
+            <div className="relative w-full aspect-[16/9] md:aspect-[21/9] rounded-lg overflow-hidden">
+              <Image 
+                src="/architecture.jpg" 
+                alt="Architecture Topology" 
+                fill 
+                className="object-contain"
+                priority
+              />
+            </div>
+            <div className="text-center text-[10px] text-gray-500 mt-2">Fig 1. High-level asynchronous message flow.</div>
+          </div>
+
+          <h3 className="text-lg text-white font-bold border-b border-white/5 pb-2">1. Core Message Broker</h3>
+          <p>
+            We utilize distributed message brokers (Kafka or Azure Service Bus) as the central nervous system. Instead of System A directly calling System B via REST, System A publishes a domain event (e.g., <code>InvoiceCreated</code>). This guarantees delivery. If the receiving ERP is undergoing maintenance, the broker retains the payload in a persistent queue. Upon restoration, the consumer resumes processing from its last committed offset.
+          </p>
+
+          <h3 className="text-lg text-white font-bold border-b border-white/5 pb-2">2. Observability & Tracing Sidecars</h3>
+          <p>
+            Observability is not injected into the business logic. We deploy OpenTelemetry sidecars that run alongside the integration workloads. These sidecars intercept ingress/egress traffic to compute schema diffs and measure execution latency. The telemetry is shipped out-of-band to our central data lake via UDP or gRPC, ensuring the primary execution thread is never blocked by logging overhead.
+          </p>
+
+          <h3 className="text-lg text-white font-bold border-b border-white/5 pb-2">3. Idempotency & Replayability</h3>
+          <p>
+            Network partitions happen. To handle retries safely, every consumer in our architecture is strictly idempotent. Payloads are tagged with a unique, cryptographically generated `Idempotency-Key` and stored in a state table (Redis/DynamoDB) for 24 hours. If a webhook is fired twice due to a network timeout, the database rejects the duplicate transaction. This is critical for preventing double-billing in financial integrations.
+          </p>
+
+          <h3 className="text-lg text-white font-bold border-b border-white/5 pb-2">4. Security Posture</h3>
+          <p>
+            All data in transit is encrypted using TLS 1.3. For data at rest within the broker, we rely on AES-256 encryption. We do not store static credentials in application configurations. Services authenticate using short-lived, rotation-based tokens via AWS IAM or HashiCorp Vault. Client payloads can be encrypted using Customer-Managed Keys (CMK), ensuring that even our infrastructure cannot decrypt sensitive payload fields without explicit permission.
           </p>
         </div>
 
-        {/* Diagram */}
-        <div className="w-full bg-white/[0.02] border border-white/10 rounded-[2rem] p-4 md:p-6 backdrop-blur-xl shadow-2xl relative group mb-20">
-          <div className="absolute inset-0 border border-[var(--color-brand-accent)]/0 rounded-[2rem] group-hover:border-[var(--color-brand-accent)]/20 transition-colors duration-700 pointer-events-none" />
-          <div className="relative w-full aspect-[16/9] md:aspect-[21/9] rounded-xl overflow-hidden bg-black/40">
-            <Image 
-              src="/architecture.jpg" 
-              alt="Flowtaris System Architecture Blueprint" 
-              fill 
-              className="object-contain"
-              priority
-            />
-          </div>
-        </div>
-
-        {/* Deep Dive Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20 mb-20">
-          
-          <div>
-            <h3 className="text-xl font-heading font-bold mb-4 text-[var(--color-brand-accent)] border-b border-white/10 pb-4">
-              1. The Death of the ESB
-            </h3>
-            <div className="space-y-4 text-gray-300 font-mono text-sm leading-loose">
-              <p>
-                Legacy Enterprise Service Buses (ESBs) are a nightmare for debugging. They hoard state, lock up during traffic spikes, and turn simple data transformations into monolithic bottlenecks.
-              </p>
-              <p>
-                We completely rip out the ESB. Instead, we implement a highly decoupled, asynchronous event-driven fabric using distributed ledgers like Apache Kafka or Azure Service Bus. This forces every single data mutation to become a discrete, immutable event. If NetSuite goes offline for 10 minutes during an ERP sync, the events queue up securely. When it comes back online, the queue drains. Zero data loss.
-              </p>
-            </div>
-          </div>
-
-          <div>
-            <h3 className="text-xl font-heading font-bold mb-4 text-[var(--color-brand-accent)] border-b border-white/10 pb-4">
-              2. Asynchronous Sidecar Tracing
-            </h3>
-            <div className="space-y-4 text-gray-300 font-mono text-sm leading-loose">
-              <p>
-                How do we power the live telemetry you see on our Observatory? We don't retroactively scrape server logs. That's slow and prone to failure. 
-              </p>
-              <p>
-                We deploy OpenTelemetry-standard sidecars directly alongside your integration nodes. These sidecars run entirely out-of-band. They silently observe payloads, calculate structural schema diffs, measure P99 latency, and ship that data to our Accountability Engine without ever blocking your main execution thread. Your transactional throughput remains untouched.
-              </p>
-            </div>
-          </div>
-
-          <div>
-            <h3 className="text-xl font-heading font-bold mb-4 text-[var(--color-brand-accent)] border-b border-white/10 pb-4">
-              3. Cryptographic Payload Lineage
-            </h3>
-            <div className="space-y-4 text-gray-300 font-mono text-sm leading-loose">
-              <p>
-                "Who updated this invoice, and when?" In a standard integration, answering that question takes 4 hours of grepping through messy logs.
-              </p>
-              <p>
-                In the Flowtaris architecture, every payload carries a cryptographically signed trace ID. From the exact microsecond a webhook fires in Stripe, to the moment it commits as a journal entry in your ERP, we can track its exact lineage. If a third-party API rejects a payload, we don't just throw a 500 error—we capture the exact headers, the malformed body, and the stack trace for immediate replay.
-              </p>
-            </div>
-          </div>
-
-          <div>
-            <h3 className="text-xl font-heading font-bold mb-4 text-[var(--color-brand-accent)] border-b border-white/10 pb-4">
-              4. Zero-Trust by Default
-            </h3>
-            <div className="space-y-4 text-gray-300 font-mono text-sm leading-loose">
-              <p>
-                Security isn't a checkbox we tick before deployment; it dictates the architecture. We operate on a strict Zero-Trust model.
-              </p>
-              <p>
-                We default to data minimization. All payloads in transit are encrypted via TLS 1.3 with Perfect Forward Secrecy. Secrets are never stored in environment variables; they are rotated dynamically via dedicated secret managers (like AWS KMS or HashiCorp Vault). We even support Bring Your Own Key (BYOK) for enterprises that require absolute sovereignty over their data.
-              </p>
-            </div>
-          </div>
-
-        </div>
-
         {/* CTA */}
-        <div className="flex flex-col sm:flex-row justify-center gap-6 pt-12 border-t border-white/10">
-          <Link href="/integration-observatory" className="px-10 py-4 bg-[var(--color-brand-accent)] text-[var(--color-brand-navy)] font-bold rounded-full hover:bg-white transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(218,165,32,0.3)] text-center">
-            See the Telemetry Live
+        <div className="flex gap-4 pt-8 border-t border-white/10 font-mono text-xs">
+          <Link href="/integration-observatory" className="px-6 py-3 bg-white text-black font-bold rounded-md hover:bg-gray-200 transition-colors">
+            $ view_telemetry
           </Link>
-          <Link href="/" className="px-10 py-4 bg-white/5 text-white font-bold rounded-full hover:bg-white/10 transition-colors text-center border border-white/10">
-            Return to Hub
+          <Link href="/" className="px-6 py-3 bg-transparent text-white font-bold rounded-md hover:bg-white/5 border border-white/20 transition-colors">
+            cd ..
           </Link>
         </div>
 
