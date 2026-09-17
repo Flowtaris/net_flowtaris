@@ -33,7 +33,7 @@ export default async function ComplianceVault() {
           description: 'SOC 2 Type II certified, GDPR/CCPA compliant, zero-trust infrastructure with AES-256 encryption and pre-filled SIG Core vendor risk assessments.',
           url: 'https://flowtaris.net/compliance-vault',
         }),
-        getFAQPageSchema(data.faqs),
+        getFAQPageSchema(data.faqs || []),
         getBreadcrumbSchema([
           { name: 'Flowtaris', url: 'https://flowtaris.com' },
           { name: 'Accountability Engine', url: 'https://flowtaris.net' },
