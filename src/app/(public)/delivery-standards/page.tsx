@@ -20,8 +20,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function DeliveryStandards() {
-  const data = getCmsData()?.deliveryStandards;
+export default async function DeliveryStandards() {
+  const data = (await getCmsData())?.deliveryStandards;
   
   if (!data) return null;
 

@@ -20,8 +20,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ComplianceVault() {
-  const data = getCmsData()?.complianceVault;
+export default async function ComplianceVault() {
+  const data = (await getCmsData())?.complianceVault;
   
   if (!data) return null;
 

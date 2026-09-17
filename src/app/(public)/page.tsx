@@ -41,7 +41,7 @@ export default async function Home() {
     mttr_minutes: 12
   };
 
-  const cms = getCmsData();
+  const cms = await getCmsData();
   const heroData = cms?.hero || {
     h1Line1: 'Raw Data.',
     h1Line2: 'Zero Spin.',

@@ -2,7 +2,7 @@ import { getCmsData } from '@/lib/cms';
 import FooterInteractive from '@/components/ui/FooterInteractive';
 
 export default async function Footer() {
-  const cms = getCmsData();
+  const cms = await getCmsData();
   const data = cms?.footer || {
     platformLinks: [],
     companyLinks: [],

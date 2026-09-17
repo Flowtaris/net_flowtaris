@@ -19,8 +19,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function IntegrationObservatory() {
-  const data = getCmsData()?.observatory;
+export default async function IntegrationObservatory() {
+  const data = (await getCmsData())?.observatory;
   
   if (!data) return null;
 

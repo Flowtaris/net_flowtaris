@@ -19,8 +19,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ROILedger() {
-  const data = getCmsData()?.roiLedger;
+export default async function ROILedger() {
+  const data = (await getCmsData())?.roiLedger;
   
   if (!data) return null;
 

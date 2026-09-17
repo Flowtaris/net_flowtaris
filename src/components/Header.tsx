@@ -4,7 +4,7 @@ import MobileNav from '@/components/ui/MobileNav';
 import { getCmsData } from '@/lib/cms';
 
 export default async function Header() {
-  const cms = getCmsData();
+  const cms = await getCmsData();
   const data = cms?.header || {
     logoText: 'Flowtaris',
     logoSubText: '',
