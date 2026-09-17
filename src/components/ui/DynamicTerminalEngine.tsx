@@ -3,12 +3,19 @@
 import { useState, useEffect, useRef } from 'react';
 import ScrollReveal from './ScrollReveal';
 
+import cmsFallback from '@/data/cms.json';
+
 type CardType = { iconId: string; title: string; description: string; codeHtml: string };
 
 export default function DynamicTerminalEngine({ data }: { data: { tagline: string; title: string; description: string; cards: CardType[] } }) {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
   const [typedStates, setTypedStates] = useState<boolean[]>([false, false, false]);
   const sectionRef = useRef<HTMLDivElement>(null);
+
+  const getFallbackCode = (title: string) => {
+    const defaultCard = cmsFallback?.standardSection?.cards?.find((c: any) => c.title === title);
+    return defaultCard ? defaultCard.codeHtml : '<div>No code available</div>';
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -94,8 +101,8 @@ export default function DynamicTerminalEngine({ data }: { data: { tagline: strin
                     <div className={`relative rounded-xl border overflow-hidden group/block transition-colors duration-500 ${isHovered ? 'bg-[#F9FAFB] border-[#059669]/20' : 'bg-gray-50 border-gray-100'}`}>
                       {/* Code Content */}
                       <div className="p-6 font-mono text-[12px] md:text-[13px] leading-[1.8] relative min-h-[220px] text-slate-900">
-                        {/* The HTML from CMS */}
-                        <div dangerouslySetInnerHTML={{ __html: card.codeHtml }}></div>
+                        {/* The HTML from CMS or Fallback */}
+                        <div dangerouslySetInnerHTML={{ __html: (!card.codeHtml || card.codeHtml.trim() === '...' || card.codeHtml.trim() === '<div>code here</div>') ? getFallbackCode(card.title) : card.codeHtml }}></div>
                         
                         {/* Typewriter Reveal Mask */}
                         <div 
