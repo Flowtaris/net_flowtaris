@@ -26,7 +26,7 @@ export default async function Header() {
         <Link href="/" className="flex items-center gap-3 group">
           <div className="relative w-9 h-9 flex items-center justify-center">
             <div className="absolute inset-0 rounded-full bg-[var(--color-brand-accent)]/10 scale-100 group-hover:scale-125 transition-transform duration-500" />
-            <LogoImage className="relative w-full h-full" />
+            {data.logoImage ? <img src={data.logoImage} alt="Logo" className="relative w-full h-full object-contain" /> : <LogoImage className="relative w-full h-full" />}
           </div>
           <div className="flex flex-col">
             <div className="flex items-baseline gap-0.5">
