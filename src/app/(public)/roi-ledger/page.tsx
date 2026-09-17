@@ -89,7 +89,7 @@ export default async function ROILedger() {
                 <div className="absolute -right-10 -top-10 text-9xl text-white/5 font-black">ROI</div>
                 <h3 className="text-2xl font-bold mb-2">Calculate your TCO</h3>
                 <p className="text-gray-300 mb-6">Contact our financial engineers for a custom total cost of ownership analysis against your current infrastructure.</p>
-                <a href="/contact" className="inline-block bg-[#059669] hover:bg-[#047857] text-white font-bold py-3 px-6 rounded-lg transition-colors">
+                <a href="https://flowtaris.com/contact" className="inline-block bg-[#059669] hover:bg-[#047857] text-white font-bold py-3 px-6 rounded-lg transition-colors">
                   Request Analysis →
                 </a>
               </div>

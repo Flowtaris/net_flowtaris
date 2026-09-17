@@ -98,9 +98,11 @@ export default function RootLayout({
         <JsonLd data={[getOrganizationSchema(), getWebSiteSchema()]} />
       </head>
       <body
-        className={`${fontBody.variable} ${fontHeading.variable} ${fontMono.variable} font-sans antialiased text-gray-900 flex flex-col min-h-screen selection:bg-[var(--color-brand-accent)] selection:text-white overflow-x-hidden w-full`}
+        className={`${fontBody.variable} ${fontHeading.variable} ${fontMono.variable} font-sans antialiased text-gray-900 selection:bg-[var(--color-brand-accent)] selection:text-white`}
       >
-        {children}
+        <div className="flex flex-col min-h-screen overflow-x-hidden w-full max-w-[100vw] relative">
+          {children}
+        </div>
       </body>
     </html>
   );
