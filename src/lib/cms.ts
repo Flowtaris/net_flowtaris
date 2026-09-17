@@ -26,6 +26,13 @@ export async function getCmsData() {
             if (!(key in target)) Object.assign(output, { [key]: source[key] });
             else output[key] = mergeDeep(target[key], source[key]);
           } else {
+            // Protect codeHtml and other string fields from being overwritten by empty strings or placeholders
+            if (typeof source[key] === 'string' && (source[key].trim() === '' || source[key].trim() === '...' || source[key].trim() === '<div>code here</div>')) {
+              if (target && target[key]) {
+                Object.assign(output, { [key]: target[key] });
+                return;
+              }
+            }
             Object.assign(output, { [key]: source[key] });
           }
         });
