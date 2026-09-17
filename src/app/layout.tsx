@@ -94,10 +94,11 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
         <JsonLd data={[getOrganizationSchema(), getWebSiteSchema()]} />
       </head>
       <body
-        className={`${fontBody.variable} ${fontHeading.variable} ${fontMono.variable} font-sans antialiased text-gray-900 flex flex-col min-h-screen selection:bg-[var(--color-brand-accent)] selection:text-white`}
+        className={`${fontBody.variable} ${fontHeading.variable} ${fontMono.variable} font-sans antialiased text-gray-900 flex flex-col min-h-screen selection:bg-[var(--color-brand-accent)] selection:text-white overflow-x-hidden w-full`}
       >
         {children}
       </body>

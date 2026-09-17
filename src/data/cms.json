@@ -47,7 +47,7 @@
     "ctaPrimaryText": "Explore Telemetry",
     "ctaPrimaryLink": "#telemetry",
     "ctaSecondaryText": "View Architecture",
-    "ctaSecondaryLink": "https://flowtaris.com/architecture"
+    "ctaSecondaryLink": "/integration-observatory"
   },
   "footer": {
     "platformLinks": [
